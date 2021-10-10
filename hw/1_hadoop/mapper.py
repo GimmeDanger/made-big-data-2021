@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """mapper.py"""
 
 import sys
@@ -28,4 +28,4 @@ mk = X / ck
 # https://en.wikipedia.org/wiki/Variance#Sample_variance
 vk = X_sq / ck - mk ** 2
 
-print(f'{ck}\t{mk}\t{vk}')
+print("{}\t{}\t{}".format(ck, mk, vk))

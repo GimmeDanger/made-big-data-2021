@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """reducer.py"""
 
 import sys
@@ -29,4 +29,4 @@ for line in sys.stdin:
     m = (c * m + ck * mk) / (c + ck)
     c = c + ck
 
-print(f'{c}\t{m}\t{v}')
+print("{}\t{}\t{}".format(c, m, v))

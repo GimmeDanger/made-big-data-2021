@@ -1,3 +1,31 @@
-метод расчета, число строк, mean, var
-numpy, 48895, 152.7206871868289, 57672.84569843359
-map_reduce,
+# Результаты
+# метод расчета, число строк, mean, var
+# numpy, 48895, 152.7206871868289, 57672.84569843359
+# map_reduce, 48895, 152.7206871868289, 57672.84569843359
+
+# Запуск джобы
+$ hadoop jar ./opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -file /mapper.py -mapper mapper.py -file /reducer.py -reducer reducer.py -input /price.txt -output /price-output
+
+# Часть вывода. Видно, что количество input строк совпадает (я заранее убрал nans), видно что работало 2 маппера:
+2021-10-10 21:11:00,700 INFO mapred.FileInputFormat: Total input files to process : 1
+2021-10-10 21:11:00,917 INFO mapreduce.JobSubmitter: number of splits:2
+Map-Reduce Framework
+		Map input records=48895
+		Map output records=2
+		Map output bytes=86
+		Map output materialized bytes=113
+		Input split bytes=164
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=2
+		Reduce shuffle bytes=113
+		Reduce input records=2
+		Reduce output records=1
+		Spilled Records=4
+		Shuffled Maps =2
+		Failed Shuffles=0
+		Merged Map outputs=2
+
+# Смотрим результаты
+$ hdfs dfs -cat /price-output/part-00000
+48895.0	152.7206871868289	57672.84569843359
