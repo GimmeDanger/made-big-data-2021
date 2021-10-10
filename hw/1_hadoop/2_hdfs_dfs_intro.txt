@@ -1,0 +1,100 @@
+# send a file to namenode and connect
+$ docker cp hamlet.txt namenode:/
+$ docker exec -it namenode /bin/bash
+
+# Task 1.1
+$ hdfs dfs -mkdir /tmp_dir
+$ hdfs dfs -ls /
+Found 3 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 13:56 /rmstate
+drwxr-xr-x   - root supergroup          0 2021-10-10 17:39 /tmp_dir
+drwxr-xr-x   - root supergroup          0 2021-10-10 17:38 /user
+
+# Task 1.2
+$ hdfs dfs -mkdir /tmp_dir/tmp_subdir
+$ hdfs dfs -ls /tmp_dir/
+Found 1 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 17:46 /tmp_dir/tmp_subdir
+
+# Task 1.3
+Каталог в /user/<user-name>/.Trash, в который отправляются удаленные с помощью -rm файлы.
+Чтобы файлы удалялись сразу, минуя Trash, нужно использовать флаг -skipTrash для команды -rm:
+$ hdfs dfs -usage rm
+Usage: hadoop fs [generic options] -rm [-f] [-r|-R] [-skipTrash] [-safely] <src> ...
+https://stackoverflow.com/questions/52740673/hadoop-hdfs-trash-location
+
+# Task 1.4
+$ hdfs dfs -touchz /tmp_dir/tmp_subdir/tmp_file
+$ hdfs dfs -ls /tmp_dir/tmp_subdir/        
+Found 1 items
+-rw-r--r--   3 root supergroup          0 2021-10-10 17:52 /tmp_dir/tmp_subdir/tmp_file
+
+# Task 1.5
+$ hdfs dfs -rm -skipTrash /tmp_dir/tmp_subdir/tmp_file
+Deleted /tmp_dir/tmp_subdir/tmp_file
+
+# Task 1.6
+$ hdfs dfs -rmdir /tmp_dir/tmp_subdir         
+$ hdfs dfs -rmdir /tmp_dir           
+$ hdfs dfs -ls /                   
+Found 2 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 13:56 /rmstate
+drwxr-xr-x   - root supergroup          0 2021-10-10 17:38 /user
+
+# Task 2.1
+$ hdfs dfs -put hamlet.txt /
+2021-10-10 18:14:16,204 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+$ hdfs dfs -ls /
+Found 3 items
+-rw-r--r--   3 root supergroup       1525 2021-10-10 18:14 /hamlet.txt
+drwxr-xr-x   - root supergroup          0 2021-10-10 13:56 /rmstate
+drwxr-xr-x   - root supergroup          0 2021-10-10 17:38 /user
+
+# Task 2.2
+$ hdfs dfs -cat /hamlet.txt
+
+# Task 2.3
+$ hdfs dfs -head /hamlet.txt
+
+# Task 2.4
+$ hdfs dfs -tail /hamlet.txt
+
+# Task 2.5
+$ hdfs dfs -cp /hamlet.txt /user/root/
+2021-10-10 18:18:15,553 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-10-10 18:18:15,658 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+$ hdfs dfs -ls /user/root/
+Found 1 items
+-rw-r--r--   3 root supergroup       1525 2021-10-10 18:18 /user/root/hamlet.txt
+$ hdfs dfs -ls /          
+Found 3 items
+-rw-r--r--   3 root supergroup       1525 2021-10-10 18:14 /hamlet.txt
+drwxr-xr-x   - root supergroup          0 2021-10-10 13:56 /rmstate
+drwxr-xr-x   - root supergroup          0 2021-10-10 17:38 /user
+
+# Task 3.1
+$ hdfs dfs -setrep -w 2 /hamlet.txt          
+Replication 2 set: /hamlet.txt
+Waiting for /hamlet.txt ...
+WARNING: the waiting time may be long for DECREASING the number of replications.
+. done
+
+> Как долго занимает время на увеличение / уменьшение числа реплик для файла?
+Все зависит от размеров файла, мощности кластера, величиния изменения количества реплик.
+В случае изменения числа репликаций для каталога, то операция рекурсивно применяется ко всему ее содержимому.
+В моем случае операция прошла почти мгновенно.
+
+# Task 3.2
+$ hdfs fsck /hamlet.txt -files -blocks -locations
+Connecting to namenode via http://namenode:9870/fsck?ugi=root&files=1&blocks=1&locations=1&path=%2Fhamlet.txt
+/hamlet.txt 1525 bytes, replicated: replication=3, 1 block(s):  OK
+0. BP-192992396-172.19.0.3-1633874158734:blk_1073741839_1015 len=1525 Live_repl=3  [DatanodeInfoWithStorage[172.19.0.3:9866,DS-59d8385a-0635-452b-8d78-6194a493f4f7,DISK], DatanodeInfoWithStorage[172.19.0.2:9866,DS-32d2ce3a-369a-4ad0-95a8-7e1f6a502299,DISK], DatanodeInfoWithStorage[172.19.0.5:9866,DS-3cfd6890-dad2-4ca7-837e-8374261a5c7a,DISK]]
+
+# Task 3.3
+$ hdfs fsck -blockId blk_1073741839     
+Connecting to namenode via http://namenode:9870/fsck?ugi=root&blockId=blk_1073741839+&path=%2F
+Block Id: blk_1073741839
+Block belongs to: /hamlet.txt
+No. of Expected Replica: 3
+No. of live Replica: 3
+
