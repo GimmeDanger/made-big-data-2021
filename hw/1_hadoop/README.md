@@ -8,7 +8,8 @@
   * Запускаем и сохраняем скриншоты: [NN.png](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/NN.png), [RM.png](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/RM.png)
   * Note: на этом этапе возникла проблема, что в дефолтном yml не было проброски порта для RM
 
-## 2. Работа с файловой системой, простейшие операции: [решение](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/2_hdfs_dfs_intro.txt)
+## 2. Работа с файловой системой, простейшие операции
+ * Запуск команд: [2_hdfs_dfs_intro.txt](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/2_hdfs_dfs_intro.txt)
 
 ## 3. Написание map reduce на Python: [tutorial](https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/)
  * Наивный расчет через numpy: [naive_calc.py](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/naive_calc.ipynb)
