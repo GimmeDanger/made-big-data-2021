@@ -1,6 +1,6 @@
 # Домашнее задание №1: Hadoop
 
-## Подробное [описание](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/HW1%20-%20Hadoop.pdf]
+## Подробное [описание](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/1_hadoop/HW1%20-%20Hadoop.pdf)
 
 ## 1. Развертывание локального кластера: [tutorial](https://youtu.be/ny2w5zImqvA)
   * Устанавливаем докер-образ из https://github.com/big-data-europe/docker-hadoop
