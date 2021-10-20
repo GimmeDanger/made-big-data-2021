@@ -1,0 +1,121 @@
+# Копируем на namenode, а оттуда -- в hdfs
+$ docker cp ~/Downloads/archive.zip docker-hadoop-hive-parquet_namenode_1:/
+$ docker exec -it docker-hadoop-hive-parquet_namenode_1 /bin/bash 
+$ unzip archive.zip
+$ hdfs dfs -put artists.csv /
+
+# Заходим на hive-server, затем в beeline
+$ docker exec -it docker-hadoop-hive-parquet_hive-server_1 /bin/bash
+$ /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
+
+# Создаем схему и заполняем значениями из hdfs
+> CREATE TABLE artists (mbid string, artist_mb string, artist_lastfm string, country_mb string, country_lastfm string, tags_mb string, tags_lastfm string, listeners_lastfm int, scrobbles_lastfm int, ambiguous_artist string) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+> LOAD DATA INPATH '/artists.csv' OVERWRITE INTO TABLE artists;
+
+# Sanity check
+> SELECT COUNT(*) FROM artists;
++----------+
+|   _c0    |
++----------+
+| 1466084  |
++----------+
+1 row selected (3.293 seconds)
+
+
+-------------------------------------------------------
+
+
+# Query-1: find artist with max scrobbles
+
+> select artist_lastfm, scrobbles_lastfm from artists order by scrobbles_lastfm desc limit 5;
++-----------------+-------------------+
+|  artist_lastfm  | scrobbles_lastfm  |
++-----------------+-------------------+
+| The Beatles     | 517126254         |
+| Radiohead       | 499548797         |
+| Coldplay        | 360111850         |
+| Muse            | 344838631         |
+| Arctic Monkeys  | 332306552         |
++-----------------+-------------------+
+
+# Answer: The Beatles
+
+-------------------------------------------------------
+
+# Query-2: find most popular lastfm tag
+# Note: split and lateral view explode required
+
+> select count(*) as cnt, tag
+  from (
+	select split(tags_lastfm, '; ') as tags_splitted
+	from artists
+  ) as t
+  lateral view explode(t.tags_splitted) bar as tag
+  where tag != ''
+  group by tag
+  order by cnt desc
+  limit 10;
++--------+-----------------------+
+|  cnt   |          tag          |
++--------+-----------------------+
+| 99537  | seen live             |
+| 73299  | rock                  |
+| 70648  | electronic            |
+| 50827  | under 2000 listeners  |
+| 50166  | All                   |
+| 48435  | pop                   |
+| 47452  | indie                 |
+| 43727  | alternative           |
+| 40840  | experimental          |
+| 35775  | female vocalists      |
++--------+-----------------------+
+# Answer: seen live
+
+# Query-3: top artist of 10 ten lastfm tags
+# Note: rank() window function required
+
+> create view if not exists top_tags as (
+  	select count(*) as cnt, tag
+        from (
+        	select split(tags_lastfm, '; ') as tags_splitted
+                from artists
+        ) as t
+        lateral view explode(t.tags_splitted) bar as tag
+        where tag != ''
+        group by tag
+        order by cnt desc
+        limit 10
+  )
+
+> select tt.artist, tt.tag, rank() over (partition by tt.tag order by tt.listeners desc) as rnk
+  from (
+	  select artist_lastfm as artist, listeners_lastfm as listeners, tag
+	  from (
+  		select artist_lastfm, listeners_lastfm, split(tags_lastfm, '; ') as tags_splitted
+		from artists
+	  ) as t
+	  lateral view explode(t.tags_splitted) bar as tag
+  ) as tt
+  where tt.tag in (
+	select tag
+	from top_tags
+  )
+  order by rnk, tt.tag
+  limit 10;
+
++----------------------+-----------------------+------+
+|      tt.artist       |        tt.tag         | rnk  |
++----------------------+-----------------------+------+
+| Jason Der?lo         | All                   | 1    |
+| Coldplay             | alternative           | 1    |
+| Coldplay             | electronic            | 1    |
+| Radiohead            | experimental          | 1    |
+| Rihanna              | female vocalists      | 1    |
+| Coldplay             | indie                 | 1    |
+| Coldplay             | pop                   | 1    |
+| Coldplay             | rock                  | 1    |
+| Coldplay             | seen live             | 1    |
+| Diddy - Dirty Money  | under 2000 listeners  | 1    |
++----------------------+-----------------------+------+
+
+
