@@ -29,10 +29,10 @@
 * https://polynote.org/
 * https://zeppelin.apache.org/
 * https://docs.aws.amazon.com/emr/index.html
-* Русскоязычное сообщество Scala https://t.me/scala_ru
-* Scala Online REPL https://scastie.scala-lang.org/
-* Хорошая онлайн-книга https://www.handsonscala.com/index.html
-* Автор пишет про Scala и Spark https://alvinalexander.com/
-* Упражнения по Scala https://www.scala-exercises.org/
+* [Русскоязычное сообщество Scala](https://t.me/scala_ru)
+* [Scala Online REPL](https://scastie.scala-lang.org/)
+* [Хорошая онлайн-книга](https://www.handsonscala.com/index.html)
+* [Автор пишет про Scala и Spark](https://alvinalexander.com/)
+* [Упражнения по Scala](https://www.scala-exercises.org/)
 * leetcode поддерживает Scala 🙂
-* Хардкор и ФП со Scala https://underscore.io/books/scala-with-cats/ 
+* [Хардкор и ФП со Scala](https://underscore.io/books/scala-with-cats/)
