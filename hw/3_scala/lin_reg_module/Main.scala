@@ -1,6 +1,6 @@
 package lin_reg
 
-import breeze.linalg._
+import breeze.linalg.{DenseVector, _}
 import breeze.numerics.{exp, log}
 import breeze.stats.mean
 
@@ -12,6 +12,12 @@ object Main {
     var df = csvread(new File(filename),',', skipLines=1)
     val requiredColumns = List(0, 1, 3, df.cols - 1)
     df(::, requiredColumns)
+  }
+
+  def save_eval(filename: String, eval_y: DenseVector[Double]): Unit = {
+    var dm = DenseMatrix.ones[Double](eval_y.size, 1)
+    dm(::, 0) := eval_y
+    csvwrite(new File(filename), dm, separator=',')
   }
 
   def train_split(df: SliceMatrix[Int, Int, Double], train_share: Double = 0.8): (SliceMatrix[Int, Int, Double], SliceMatrix[Int, Int, Double]) = {
@@ -63,11 +69,11 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     val df = get_df(args(0))
-    println("Loading dataframe from %s\n".format(args(0)))
+    println("Loading train dataframe from %s".format(args(0)))
     println("Loaded dataframe (rows, cols) = (%d, %d)\n".format(df.rows, df.cols))
 
     var (df_train, df_test) = train_split(df)
-    println("Splitted Train/Val part size = (%d, %d)\n".format(df_train.rows, df_test.rows))
+    println("Train/Val part size = (%d, %d)\n".format(df_train.rows, df_test.rows))
 
     df_train := minMaxScaler(df_train)
     df_test := minMaxScaler(df_test)
@@ -82,6 +88,15 @@ object Main {
     var y_test = get_y(df_test)
     var pred_y = predict(X_test, beta)
     var score = r2_score(exp(y_test), pred_y)
-    println("R2 score on Val: %f".format(score))
+    println("R2 score on Val: %f\n".format(score))
+
+    val df_eval = get_X(get_df(args(1)))
+    println("Loading eval dataframe from %s".format(args(1)))
+    println("Loaded dataframe (rows, cols) = (%d, %d)\n".format(df.rows, df.cols-1))
+    var eval_y = predict(df_eval, beta)
+
+    var outfile = "eval_y.csv"
+    println("Saving eval_y to %s".format(outfile))
+    save_eval(outfile, eval_y)
   }
 }
