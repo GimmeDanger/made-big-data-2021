@@ -15,6 +15,7 @@
 ## Домашние задания:
 1. Работа с hadoop и map_reduce: [решение](https://github.com/GimmeDanger/made-big-data-2021/tree/master/hw/1_hadoop)
 2. Работа с Hive и HiveQL: [решение](https://github.com/GimmeDanger/made-big-data-2021/tree/master/hw/2_hive)
+3. Введение в Scale и Breeze: [решение](https://github.com/GimmeDanger/made-big-data-2021/tree/master/hw/3_scala)
 
 
 ## Рекомендованная литература:
