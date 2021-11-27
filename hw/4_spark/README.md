@@ -15,8 +15,6 @@ $ docker run -p 8080:8080 --rm --name zeppelin apache/zeppelin:0.10.0
 $ docker cp tripadvisor_hotel_reviews.csv 3a00188f2555:/opt/zeppelin/notebook/
 </pre>
 
-### Ноутбук-решение:
-* [tf_idf.zpln](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/4_spark/tf_idf.zpln)
-* [tf_idf.ipynb](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/4_spark/tf_idf.ipynb)
+### Ноутбук-решение: [tf_idf.zpln](https://github.com/GimmeDanger/made-big-data-2021/blob/master/hw/4_spark/tf_idf.zpln)
 
 
