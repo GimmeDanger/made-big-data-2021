@@ -1,0 +1,675 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "val df = spark.read\n    .option(\"header\", \"true\")\n    .option(\"inferSchema\", \"true\")\n    .option(\"sep\", \",\")\n    .csv(\"/opt/zeppelin/notebook/tripadvisor_hotel_reviews.csv\")\n\ndf.head",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:11+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [Review: string, Rating: int]\n\u001b[1m\u001b[34mres98\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m = [nice hotel expensive parking got good deal stay hotel anniversary, arrived late evening took advice previous reviews did valet parking, check quick easy, little disappointed non-existent view room room clean nice size, bed comfortable woke stiff neck high pillows, not soundproof like heard music room night morning loud bangs doors opening closing hear people talking hallway, maybe just noisy neighbors, aveda bath products nice, did not goldfish stay nice touch taken advantage staying longer, location great walking distance shopping, overall nice experience having pay 40 parking night,  ,4]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=202",
+              "$$hashKey": "object:11035"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=203",
+              "$$hashKey": "object:11036"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=204",
+              "$$hashKey": "object:11037"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637964041842_1074646632",
+      "id": "paragraph_1637964041842_1074646632",
+      "dateCreated": "2021-11-26T22:00:41+0000",
+      "dateStarted": "2021-11-27T06:19:11+0000",
+      "dateFinished": "2021-11-27T06:19:12+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:9835"
+    },
+    {
+      "text": "// привести все к одному регистру\nval df_lower = df\n    .withColumn(\"Review\", lower(col(\"Review\")))\n    .select(\"Review\")\ndf_lower.head",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:12+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mdf_lower\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [Review: string]\n\u001b[1m\u001b[34mres99\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m = [nice hotel expensive parking got good deal stay hotel anniversary, arrived late evening took advice previous reviews did valet parking, check quick easy, little disappointed non-existent view room room clean nice size, bed comfortable woke stiff neck high pillows, not soundproof like heard music room night morning loud bangs doors opening closing hear people talking hallway, maybe just noisy neighbors, aveda bath products nice, did not goldfish stay nice touch taken advantage staying longer, location great walking distance shopping, overall nice experience having pay 40 parking night,  ]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=205",
+              "$$hashKey": "object:11080"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637964950364_1467951709",
+      "id": "paragraph_1637964950364_1467951709",
+      "dateCreated": "2021-11-26T22:15:50+0000",
+      "dateStarted": "2021-11-27T06:19:12+0000",
+      "dateFinished": "2021-11-27T06:19:12+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9836"
+    },
+    {
+      "text": "// удалить все спецсимволы (кроме \\\\s и латинский букв)\nval df_clear = df_lower\n    .withColumn(\"Review\", regexp_replace(col(\"Review\"), \"[^a-z ]\", \"\"))\ndf_clear.head",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:12+0000",
+      "progress": 100,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mdf_clear\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [Review: string]\n\u001b[1m\u001b[34mres100\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m = [nice hotel expensive parking got good deal stay hotel anniversary arrived late evening took advice previous reviews did valet parking check quick easy little disappointed nonexistent view room room clean nice size bed comfortable woke stiff neck high pillows not soundproof like heard music room night morning loud bangs doors opening closing hear people talking hallway maybe just noisy neighbors aveda bath products nice did not goldfish stay nice touch taken advantage staying longer location great walking distance shopping overall nice experience having pay  parking night  ]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=206",
+              "$$hashKey": "object:11115"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637964960907_184640139",
+      "id": "paragraph_1637964960907_184640139",
+      "dateCreated": "2021-11-26T22:16:00+0000",
+      "dateStarted": "2021-11-27T06:19:12+0000",
+      "dateFinished": "2021-11-27T06:19:13+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9837"
+    },
+    {
+      "text": "// разбить предложение на массивы слов\nval df_words = df_clear\n    .withColumn(\"Review\", trim(col(\"Review\")))\n    .withColumn(\"Review\", split(col(\"Review\"), \"\\\\s+\"))\ndf_words.head",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:13+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mdf_words\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [Review: array<string>]\n\u001b[1m\u001b[34mres101\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m = [WrappedArray(nice, hotel, expensive, parking, got, good, deal, stay, hotel, anniversary, arrived, late, evening, took, advice, previous, reviews, did, valet, parking, check, quick, easy, little, disappointed, nonexistent, view, room, room, clean, nice, size, bed, comfortable, woke, stiff, neck, high, pillows, not, soundproof, like, heard, music, room, night, morning, loud, bangs, doors, opening, closing, hear, people, talking, hallway, maybe, just, noisy, neighbors, aveda, bath, products, nice, did, not, goldfish, stay, nice, touch, taken, advantage, staying, longer, location, great, walking, distance, shopping, overall, nice, experie..."
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=207",
+              "$$hashKey": "object:11150"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637965760569_1134546407",
+      "id": "paragraph_1637965760569_1134546407",
+      "dateCreated": "2021-11-26T22:29:20+0000",
+      "dateStarted": "2021-11-27T06:19:13+0000",
+      "dateFinished": "2021-11-27T06:19:13+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9838"
+    },
+    {
+      "text": "// развернуть массивы слов отдельные строки с идентификатором отзыва\nval df_words_counted = df_words\n    .withColumn(\"ReviewId\", monotonically_increasing_id())\n    .withColumn(\"Word\", explode(col(\"Review\")))\n    .select(\"ReviewId\", \"Word\")\ndf_words_counted.show(200)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:13+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+------------+\n|ReviewId|        Word|\n+--------+------------+\n|       0|        nice|\n|       0|       hotel|\n|       0|   expensive|\n|       0|     parking|\n|       0|         got|\n|       0|        good|\n|       0|        deal|\n|       0|        stay|\n|       0|       hotel|\n|       0| anniversary|\n|       0|     arrived|\n|       0|        late|\n|       0|     evening|\n|       0|        took|\n|       0|      advice|\n|       0|    previous|\n|       0|     reviews|\n|       0|         did|\n|       0|       valet|\n|       0|     parking|\n|       0|       check|\n|       0|       quick|\n|       0|        easy|\n|       0|      little|\n|       0|disappointed|\n|       0| nonexistent|\n|       0|        view|\n|       0|        room|\n|       0|        room|\n|       0|       clean|\n|       0|        nice|\n|       0|        size|\n|       0|         bed|\n|       0| comfortable|\n|       0|        woke|\n|       0|       stiff|\n|       0|        neck|\n|       0|        high|\n|       0|     pillows|\n|       0|         not|\n|       0|  soundproof|\n|       0|        like|\n|       0|       heard|\n|       0|       music|\n|       0|        room|\n|       0|       night|\n|       0|     morning|\n|       0|        loud|\n|       0|       bangs|\n|       0|       doors|\n|       0|     opening|\n|       0|     closing|\n|       0|        hear|\n|       0|      people|\n|       0|     talking|\n|       0|     hallway|\n|       0|       maybe|\n|       0|        just|\n|       0|       noisy|\n|       0|   neighbors|\n|       0|       aveda|\n|       0|        bath|\n|       0|    products|\n|       0|        nice|\n|       0|         did|\n|       0|         not|\n|       0|    goldfish|\n|       0|        stay|\n|       0|        nice|\n|       0|       touch|\n|       0|       taken|\n|       0|   advantage|\n|       0|     staying|\n|       0|      longer|\n|       0|    location|\n|       0|       great|\n|       0|     walking|\n|       0|    distance|\n|       0|    shopping|\n|       0|     overall|\n|       0|        nice|\n|       0|  experience|\n|       0|      having|\n|       0|         pay|\n|       0|     parking|\n|       0|       night|\n|       1|          ok|\n|       1|     nothing|\n|       1|     special|\n|       1|      charge|\n|       1|     diamond|\n|       1|      member|\n|       1|      hilton|\n|       1|     decided|\n|       1|       chain|\n|       1|        shot|\n|       1|          th|\n|       1| anniversary|\n|       1|     seattle|\n|       1|       start|\n|       1|      booked|\n|       1|       suite|\n|       1|        paid|\n|       1|       extra|\n|       1|     website|\n|       1| description|\n|       1|         not|\n|       1|       suite|\n|       1|     bedroom|\n|       1|    bathroom|\n|       1|    standard|\n|       1|       hotel|\n|       1|        room|\n|       1|        took|\n|       1|     printed|\n|       1| reservation|\n|       1|        desk|\n|       1|      showed|\n|       1|        said|\n|       1|      things|\n|       1|        like|\n|       1|          tv|\n|       1|       couch|\n|       1|         ect|\n|       1|        desk|\n|       1|       clerk|\n|       1|        told|\n|       1|          oh|\n|       1|       mixed|\n|       1|      suites|\n|       1| description|\n|       1|     kimpton|\n|       1|     website|\n|       1|       sorry|\n|       1|        free|\n|       1|   breakfast|\n|       1|         got|\n|       1|     kidding|\n|       1|     embassy|\n|       1|       suits|\n|       1|     sitting|\n|       1|        room|\n|       1|    bathroom|\n|       1|     bedroom|\n|       1|      unlike|\n|       1|     kimpton|\n|       1|       calls|\n|       1|       suite|\n|       1|         day|\n|       1|        stay|\n|       1|       offer|\n|       1|     correct|\n|       1|       false|\n|       1| advertising|\n|       1|        send|\n|       1|     kimpton|\n|       1|   preferred|\n|       1|       guest|\n|       1|     website|\n|       1|       email|\n|       1|      asking|\n|       1|     failure|\n|       1|     provide|\n|       1|       suite|\n|       1|  advertised|\n|       1|     website|\n|       1| reservation|\n|       1| description|\n|       1|   furnished|\n|       1|        hard|\n|       1|        copy|\n|       1| reservation|\n|       1|    printout|\n|       1|     website|\n|       1|        desk|\n|       1|     manager|\n|       1|        duty|\n|       1|         did|\n|       1|         not|\n|       1|       reply|\n|       1|    solution|\n|       1|        send|\n|       1|       email|\n|       1|        trip|\n|       1|       guest|\n|       1|      survey|\n|       1|         did|\n|       1|         not|\n|       1|      follow|\n|       1|       email|\n|       1|        mail|\n|       1|       guess|\n|       1|        tell|\n|       1|   concerned|\n|       1|    guestthe|\n|       1|       staff|\n|       1|      ranged|\n|       1| indifferent|\n|       1|         not|\n|       1|     helpful|\n+--------+------------+\nonly showing top 200 rows\n\n\u001b[1m\u001b[34mdf_words_counted\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [ReviewId: bigint, Word: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=208",
+              "$$hashKey": "object:11171"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637987835868_52901185",
+      "id": "paragraph_1637987835868_52901185",
+      "dateCreated": "2021-11-27T04:37:15+0000",
+      "dateStarted": "2021-11-27T06:19:13+0000",
+      "dateFinished": "2021-11-27T06:19:13+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9839"
+    },
+    {
+      "text": "// посчитать частоту слова в рамках каждого документа: tf\n\nimport org.apache.spark.sql.expressions.Window\n\nval revieIdWordWindow = Window.partitionBy(\"Reviewid\", \"Word\")\nval revieIdWindow = Window.partitionBy(\"Reviewid\")\nval wordWindow = Window.partitionBy(\"Word\")\n\nval df_calculated_tf = df_words_counted\n    .withColumn(\"FD\", count(col(\"Word\")).over(revieIdWordWindow))\n    .dropDuplicates(\"ReviewId\", \"Word\", \"FD\")\n    .withColumn(\"SFD\", count(col(\"ReviewId\")).over(revieIdWindow))\n    .withColumn(\"TF\", col(\"FD\") / col(\"SFD\"))\n    .orderBy(\"ReviewId\")\n\ndf_calculated_tf.show(300)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:13+0000",
+      "progress": 83,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+---------------+---+---+--------------------+\n|ReviewId|           Word| FD|SFD|                  TF|\n+--------+---------------+---+---+--------------------+\n|       0|        evening|  1| 73|  0.0136986301369863|\n|       0|          stiff|  1| 73|  0.0136986301369863|\n|       0|        arrived|  1| 73|  0.0136986301369863|\n|       0|        hallway|  1| 73|  0.0136986301369863|\n|       0|          taken|  1| 73|  0.0136986301369863|\n|       0|         advice|  1| 73|  0.0136986301369863|\n|       0|    nonexistent|  1| 73|  0.0136986301369863|\n|       0|           bath|  1| 73|  0.0136986301369863|\n|       0|        closing|  1| 73|  0.0136986301369863|\n|       0|         little|  1| 73|  0.0136986301369863|\n|       0|       location|  1| 73|  0.0136986301369863|\n|       0|           just|  1| 73|  0.0136986301369863|\n|       0|    anniversary|  1| 73|  0.0136986301369863|\n|       0|          hotel|  2| 73|  0.0273972602739726|\n|       0|           view|  1| 73|  0.0136986301369863|\n|       0|           good|  1| 73|  0.0136986301369863|\n|       0|            did|  2| 73|  0.0273972602739726|\n|       0|        staying|  1| 73|  0.0136986301369863|\n|       0|           easy|  1| 73|  0.0136986301369863|\n|       0|       goldfish|  1| 73|  0.0136986301369863|\n|       0|       distance|  1| 73|  0.0136986301369863|\n|       0|          great|  1| 73|  0.0136986301369863|\n|       0|           woke|  1| 73|  0.0136986301369863|\n|       0|     experience|  1| 73|  0.0136986301369863|\n|       0|      advantage|  1| 73|  0.0136986301369863|\n|       0|           size|  1| 73|  0.0136986301369863|\n|       0|          night|  2| 73|  0.0273972602739726|\n|       0|           neck|  1| 73|  0.0136986301369863|\n|       0|           late|  1| 73|  0.0136986301369863|\n|       0|           hear|  1| 73|  0.0136986301369863|\n|       0|            not|  2| 73|  0.0273972602739726|\n|       0|       previous|  1| 73|  0.0136986301369863|\n|       0|   disappointed|  1| 73|  0.0136986301369863|\n|       0|        parking|  3| 73|  0.0410958904109589|\n|       0|          bangs|  1| 73|  0.0136986301369863|\n|       0|           stay|  2| 73|  0.0273972602739726|\n|       0|          touch|  1| 73|  0.0136986301369863|\n|       0|            pay|  1| 73|  0.0136986301369863|\n|       0|      expensive|  1| 73|  0.0136986301369863|\n|       0|        pillows|  1| 73|  0.0136986301369863|\n|       0|    comfortable|  1| 73|  0.0136986301369863|\n|       0|          music|  1| 73|  0.0136986301369863|\n|       0|          noisy|  1| 73|  0.0136986301369863|\n|       0|           high|  1| 73|  0.0136986301369863|\n|       0|       products|  1| 73|  0.0136986301369863|\n|       0|          valet|  1| 73|  0.0136986301369863|\n|       0|            bed|  1| 73|  0.0136986301369863|\n|       0|       shopping|  1| 73|  0.0136986301369863|\n|       0|          aveda|  1| 73|  0.0136986301369863|\n|       0|           room|  3| 73|  0.0410958904109589|\n|       0|        opening|  1| 73|  0.0136986301369863|\n|       0|        reviews|  1| 73|  0.0136986301369863|\n|       0|            got|  1| 73|  0.0136986301369863|\n|       0|           deal|  1| 73|  0.0136986301369863|\n|       0|           loud|  1| 73|  0.0136986301369863|\n|       0|        morning|  1| 73|  0.0136986301369863|\n|       0|          clean|  1| 73|  0.0136986301369863|\n|       0|        overall|  1| 73|  0.0136986301369863|\n|       0|     soundproof|  1| 73|  0.0136986301369863|\n|       0|        talking|  1| 73|  0.0136986301369863|\n|       0|         having|  1| 73|  0.0136986301369863|\n|       0|        walking|  1| 73|  0.0136986301369863|\n|       0|           like|  1| 73|  0.0136986301369863|\n|       0|          check|  1| 73|  0.0136986301369863|\n|       0|          doors|  1| 73|  0.0136986301369863|\n|       0|           nice|  5| 73|  0.0684931506849315|\n|       0|          heard|  1| 73|  0.0136986301369863|\n|       0|      neighbors|  1| 73|  0.0136986301369863|\n|       0|         longer|  1| 73|  0.0136986301369863|\n|       0|          quick|  1| 73|  0.0136986301369863|\n|       0|           took|  1| 73|  0.0136986301369863|\n|       0|         people|  1| 73|  0.0136986301369863|\n|       0|          maybe|  1| 73|  0.0136986301369863|\n|       1|           does|  1|174|0.005747126436781609|\n|       1|         bottle|  1|174|0.005747126436781609|\n|       1|       solution|  1|174|0.005747126436781609|\n|       1| comfortablenot|  1|174|0.005747126436781609|\n|       1|        pillows|  2|174|0.011494252873563218|\n|       1|          great|  1|174|0.005747126436781609|\n|       1|           took|  1|174|0.005747126436781609|\n|       1|        bedroom|  2|174|0.011494252873563218|\n|       1|         ranged|  1|174|0.005747126436781609|\n|       1|           know|  1|174|0.005747126436781609|\n|       1|        manager|  1|174|0.005747126436781609|\n|       1|           desk|  4|174|0.022988505747126436|\n|       1|          block|  1|174|0.005747126436781609|\n|       1|        kimpton|  3|174|0.017241379310344827|\n|       1|   housekeeping|  1|174|0.005747126436781609|\n|       1|          exist|  1|174|0.005747126436781609|\n|       1|       bathroom|  2|174|0.011494252873563218|\n|       1|    description|  3|174|0.017241379310344827|\n|       1|           told|  3|174|0.017241379310344827|\n|       1|         really|  1|174|0.005747126436781609|\n|       1|          start|  2|174|0.011494252873563218|\n|       1|      champagne|  2|174|0.011494252873563218|\n|       1|        printed|  1|174|0.005747126436781609|\n|       1|        seattle|  3|174|0.017241379310344827|\n|       1|        nothing|  1|174|0.005747126436781609|\n|       1|           room|  6|174|0.034482758620689655|\n|       1|        kidding|  1|174|0.005747126436781609|\n|       1|           make|  1|174|0.005747126436781609|\n|       1|              x|  1|174|0.005747126436781609|\n|       1|        correct|  1|174|0.005747126436781609|\n|       1|           send|  2|174|0.011494252873563218|\n|       1|          false|  1|174|0.005747126436781609|\n|       1|          couch|  1|174|0.005747126436781609|\n|       1|      sensitive|  1|174|0.005747126436781609|\n|       1|           trip|  1|174|0.005747126436781609|\n|       1|         suites|  1|174|0.005747126436781609|\n|       1|        special|  1|174|0.005747126436781609|\n|       1|       directly|  1|174|0.005747126436781609|\n|       1|          clean|  1|174|0.005747126436781609|\n|       1|          rates|  1|174|0.005747126436781609|\n|       1|         needed|  1|174|0.005747126436781609|\n|       1|      bagsprior|  1|174|0.005747126436781609|\n|       1|           like|  2|174|0.011494252873563218|\n|       1|             oh|  1|174|0.005747126436781609|\n|       1|            got|  3|174|0.017241379310344827|\n|       1|             ok|  1|174|0.005747126436781609|\n|       1|   controlsthis|  1|174|0.005747126436781609|\n|       1|           tape|  1|174|0.005747126436781609|\n|       1|       standard|  1|174|0.005747126436781609|\n|       1|        chating|  1|174|0.005747126436781609|\n|       1|    indifferent|  1|174|0.005747126436781609|\n|       1|          short|  1|174|0.005747126436781609|\n|       1|        decided|  1|174|0.005747126436781609|\n|       1|           duty|  1|174|0.005747126436781609|\n|       1|           hard|  1|174|0.005747126436781609|\n|       1|           hood|  1|174|0.005747126436781609|\n|       1|           paid|  1|174|0.005747126436781609|\n|       1|        covered|  1|174|0.005747126436781609|\n|       1|        deliver|  1|174|0.005747126436781609|\n|       1|          guest|  2|174|0.011494252873563218|\n|       1|             pm|  1|174|0.005747126436781609|\n|       1|          trips|  1|174|0.005747126436781609|\n|       1|           stay|  1|174|0.005747126436781609|\n|       1|           view|  1|174|0.005747126436781609|\n|       1|      celebrate|  1|174|0.005747126436781609|\n|       1|          suits|  1|174|0.005747126436781609|\n|       1|      concerned|  1|174|0.005747126436781609|\n|       1|       guestthe|  1|174|0.005747126436781609|\n|       1|          night|  2|174|0.011494252873563218|\n|       1|         inform|  1|174|0.005747126436781609|\n|       1|             tv|  1|174|0.005747126436781609|\n|       1|           busy|  1|174|0.005747126436781609|\n|       1|         hilton|  1|174|0.005747126436781609|\n|       1|            did|  2|174|0.011494252873563218|\n|       1|            run|  1|174|0.005747126436781609|\n|       1|           cell|  1|174|0.005747126436781609|\n|       1|          mixed|  1|174|0.005747126436781609|\n|       1|          spots|  2|174|0.011494252873563218|\n|       1|         screen|  1|174|0.005747126436781609|\n|       1|           beds|  1|174|0.005747126436781609|\n|       1|        morning|  1|174|0.005747126436781609|\n|       1|    advertising|  1|174|0.005747126436781609|\n|       1|           copy|  1|174|0.005747126436781609|\n|       1|       business|  1|174|0.005747126436781609|\n|       1|        helpful|  1|174|0.005747126436781609|\n|       1|         acheat|  1|174|0.005747126436781609|\n|       1|    anniversary|  2|174|0.011494252873563218|\n|       1|      breakfast|  3|174|0.017241379310344827|\n|       1|         asking|  1|174|0.005747126436781609|\n|       1|         member|  1|174|0.005747126436781609|\n|       1|          suite|  4|174|0.022988505747126436|\n|       1|       property|  1|174|0.005747126436781609|\n|       1|          hotel|  5|174|0.028735632183908046|\n|       1|     advertised|  1|174|0.005747126436781609|\n|       1|         survey|  1|174|0.005747126436781609|\n|       1|          chain|  2|174|0.011494252873563218|\n|       1|      preferred|  1|174|0.005747126436781609|\n|       1|        cleaner|  1|174|0.005747126436781609|\n|       1|        emailed|  1|174|0.005747126436781609|\n|       1|         unlike|  1|174|0.005747126436781609|\n|       1|          phone|  1|174|0.005747126436781609|\n|       1|       printout|  1|174|0.005747126436781609|\n|       1|        arrival|  3|174|0.017241379310344827|\n|       1|           help|  1|174|0.005747126436781609|\n|       1|        embassy|  1|174|0.005747126436781609|\n|       1|      impressed|  1|174|0.005747126436781609|\n|       1|             no|  3|174|0.017241379310344827|\n|       1|           good|  4|174|0.022988505747126436|\n|       1|           shot|  1|174|0.005747126436781609|\n|       1|            not|  7|174|0.040229885057471264|\n|       1|          bring|  1|174|0.005747126436781609|\n|       1|          super|  1|174|0.005747126436781609|\n|       1|            gee|  1|174|0.005747126436781609|\n|       1|          staff|  2|174|0.011494252873563218|\n|       1|          light|  1|174|0.005747126436781609|\n|       1|           high|  2|174|0.011494252873563218|\n|       1|        bellman|  1|174|0.005747126436781609|\n|       1|          alley|  1|174|0.005747126436781609|\n|       1|       shopping|  1|174|0.005747126436781609|\n|       1|     convenient|  1|174|0.005747126436781609|\n|       1|   strawberries|  2|174|0.011494252873563218|\n|       1|        control|  1|174|0.005747126436781609|\n|       1|          clerk|  1|174|0.005747126436781609|\n|       1|        website|  5|174|0.028735632183908046|\n|       1|          email|  4|174|0.022988505747126436|\n|       1|           late|  1|174|0.005747126436781609|\n|       1|       building|  1|174|0.005747126436781609|\n|       1|        diamond|  1|174|0.005747126436781609|\n|       1|    reservation|  3|174|0.017241379310344827|\n|       1|          shine|  1|174|0.005747126436781609|\n|       1|          picky|  1|174|0.005747126436781609|\n|       1|         hotels|  2|174|0.011494252873563218|\n|       1|            ect|  1|174|0.005747126436781609|\n|       1|      furnished|  1|174|0.005747126436781609|\n|       1|           inch|  1|174|0.005747126436781609|\n|       1|           away|  1|174|0.005747126436781609|\n|       1|      chocolate|  1|174|0.005747126436781609|\n|       1|          asked|  1|174|0.005747126436781609|\n|       1|           half|  1|174|0.005747126436781609|\n|       1|        sitting|  1|174|0.005747126436781609|\n|       1|         showed|  1|174|0.005747126436781609|\n|       1|        provide|  1|174|0.005747126436781609|\n|       1|           tell|  1|174|0.005747126436781609|\n|       1|           said|  1|174|0.005747126436781609|\n|       1|             th|  2|174|0.011494252873563218|\n|       1|          extra|  1|174|0.005747126436781609|\n|       1|           sure|  1|174|0.005747126436781609|\n|       1|          guess|  1|174|0.005747126436781609|\n|       1|         inside|  1|174|0.005747126436781609|\n|       1|         follow|  1|174|0.005747126436781609|\n|       1|           mail|  1|174|0.005747126436781609|\n|       1|          green|  1|174|0.005747126436781609|\n|       1|         better|  2|174|0.011494252873563218|\n|       1|        failure|  1|174|0.005747126436781609|\n|       1|           foam|  2|174|0.011494252873563218|\n|       1|            day|  1|174|0.005747126436781609|\n|       1|          reply|  1|174|0.005747126436781609|\n|       1|         charge|  1|174|0.005747126436781609|\n|       1|         wanted|  1|174|0.005747126436781609|\n|       1|          calls|  1|174|0.005747126436781609|\n|       1|         booked|  1|174|0.005747126436781609|\n|       1|          hours|  1|174|0.005747126436781609|\n|       1|   neighborhood|  1|174|0.005747126436781609|\n|       1|           eyes|  1|174|0.005747126436781609|\n|       1|        arrived|  1|174|0.005747126436781609|\n|       1|           free|  1|174|0.005747126436781609|\n|       1|         saying|  1|174|0.005747126436781609|\n|       1|           rise|  1|174|0.005747126436781609|\n|       1|         things|  1|174|0.005747126436781609|\n|       1|          sorry|  1|174|0.005747126436781609|\n|       1|           best|  1|174|0.005747126436781609|\n|       1|          offer|  1|174|0.005747126436781609|\n|       1|           nice|  1|174|0.005747126436781609|\n|       1|           left|  1|174|0.005747126436781609|\n|       2|             tv|  1|151|0.006622516556291391|\n|       2|        arrange|  1|151|0.006622516556291391|\n|       2|  mediterranean|  2|151|0.013245033112582781|\n|       2|             no|  2|151|0.013245033112582781|\n|       2|           said|  1|151|0.006622516556291391|\n|       2|        channel|  1|151|0.006622516556291391|\n|       2|        soaking|  1|151|0.006622516556291391|\n|       2|           jets|  2|151|0.013245033112582781|\n|       2|           blue|  1|151|0.006622516556291391|\n|       2|              f|  1|151|0.006622516556291391|\n|       2|             st|  2|151|0.013245033112582781|\n|       2|            try|  1|151|0.006622516556291391|\n|       2|         wakeup|  4|151|0.026490066225165563|\n|       2|        gesture|  1|151|0.006622516556291391|\n|       2|           drop|  1|151|0.006622516556291391|\n|       2|         bright|  1|151|0.006622516556291391|\n|       2|        weekend|  1|151|0.006622516556291391|\n|       2|          space|  1|151|0.006622516556291391|\n|       2|          later|  1|151|0.006622516556291391|\n|       2|            use|  1|151|0.006622516556291391|\n|       2|        special|  1|151|0.006622516556291391|\n|       2|            car|  1|151|0.006622516556291391|\n|       2|            box|  1|151|0.006622516556291391|\n|       2|         monaco|  1|151|0.006622516556291391|\n|       2|         bottle|  1|151|0.006622516556291391|\n|       2|           play|  1|151|0.006622516556291391|\n|       2|     requeststv|  1|151|0.006622516556291391|\n|       2|           busy|  1|151|0.006622516556291391|\n|       2|          calls|  1|151|0.006622516556291391|\n|       2|           good|  1|151|0.006622516556291391|\n|       2|    accessories|  1|151|0.006622516556291391|\n|       2|           dock|  2|151|0.013245033112582781|\n|       2|            yep|  1|151|0.006622516556291391|\n|       2|         missed|  1|151|0.006622516556291391|\n|       2|       separate|  1|151|0.006622516556291391|\n|       2|             ac|  1|151|0.006622516556291391|\n|       2|disappointingin|  1|151|0.006622516556291391|\n|       2|      amenities|  1|151|0.006622516556291391|\n|       2|          check|  1|151|0.006622516556291391|\n|       2|         larger|  1|151|0.006622516556291391|\n|       2|         picked|  1|151|0.006622516556291391|\n|       2|            big|  1|151|0.006622516556291391|\n|       2|          suite|  3|151|0.019867549668874173|\n|       2|          large|  1|151|0.006622516556291391|\n|       2|   showerbefore|  1|151|0.006622516556291391|\n|       2|         called|  2|151|0.013245033112582781|\n|       2|        digital|  1|151|0.006622516556291391|\n|       2|          hotel|  3|151|0.019867549668874173|\n|       2|        checked|  1|151|0.006622516556291391|\n|       2|         change|  1|151|0.006622516556291391|\n|       2| arrivalcheckin|  1|151|0.006622516556291391|\n|       2|           came|  1|151|0.006622516556291391|\n|       2|         jacuzi|  1|151|0.006622516556291391|\n+--------+---------------+---+---+--------------------+\nonly showing top 300 rows\n\nimport org.apache.spark.sql.expressions.Window\n\u001b[1m\u001b[34mrevieIdWordWindow\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.WindowSpec\u001b[0m = org.apache.spark.sql.expressions.WindowSpec@5b03354c\n\u001b[1m\u001b[34mrevieIdWindow\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.WindowSpec\u001b[0m = org.apache.spark.sql.expressions.WindowSpec@303802c8\n\u001b[1m\u001b[34mwordWindow\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.WindowSpec\u001b[0m = org.apache.spark.sql.expressions.WindowSpec@746f6567\n\u001b[1m\u001b[34mdf_calculated_tf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m = [ReviewId: bigint, Word: string ... 3 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=209",
+              "$$hashKey": "object:11191"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637988088230_1858016113",
+      "id": "paragraph_1637988088230_1858016113",
+      "dateCreated": "2021-11-27T04:41:28+0000",
+      "dateStarted": "2021-11-27T06:19:13+0000",
+      "dateFinished": "2021-11-27T06:19:19+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9840"
+    },
+    {
+      "text": "// посчитать количество документов со словом, взять только 100 самых встречаемых\n\nval DN = df.count()\nval df_calculated_idf = df_calculated_tf\n    .select(\"ReviewId\", \"Word\")\n    .withColumn(\"DF\", count(col(\"Word\")).over(wordWindow))\n    .select(\"Word\", \"DF\")\n    .dropDuplicates(\"Word\")\n    .orderBy(desc(\"DF\"))\n    .limit(100)\n    .withColumn(\"DN\", lit(DN))\n    .withColumn(\"IDF\", log(col(\"DN\") / col(\"DF\")))\n    \n    \ndf_calculated_idf.show(100)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:19+0000",
+      "progress": 87,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-----------+-----+-----+-------------------+\n|       Word|   DF|   DN|                IDF|\n+-----------+-----+-----+-------------------+\n|      hotel|16325|20491| 0.2272880901922008|\n|       room|14056|20491|0.37693641446989945|\n|        not|12124|20491| 0.5247988061591388|\n|      staff|11528|20491| 0.5752069066574745|\n|      great|11021|20491| 0.6201832216452906|\n|       stay|10096|20491| 0.7078464595558381|\n|       good| 9280|20491| 0.7921242185565862|\n|     stayed| 8552|20491| 0.8738205916319515|\n|         nt| 8383|20491| 0.8937799196989752|\n|      rooms| 8341|20491| 0.8988026520952206|\n|   location| 8172|20491| 0.9192720883993198|\n|       just| 7736|20491| 0.9741010072037023|\n|      clean| 7651|20491| 0.9851494071049807|\n|       nice| 7420|20491| 1.0158067081754063|\n|        did| 7207|20491| 1.0449329894123915|\n|  breakfast| 7113|20491| 1.0580616696033174|\n|         no| 6818|20491|  1.100419591638984|\n|      night| 6479|20491| 1.1514195878868754|\n|    service| 6232|20491| 1.1902884567862484|\n|       time| 6155|20491| 1.2027210057182787|\n|   friendly| 5839|20491|  1.255426216053295|\n|        day| 5781|20491| 1.2654090872543564|\n|       food| 5476|20491|  1.319610857928493|\n|       like| 5329|20491| 1.3468221620400502|\n|      place| 5316|20491| 1.3492646245036966|\n|    helpful| 5057|20491| 1.3992123432568495|\n|     really| 4883|20491| 1.4342259802751725|\n|      small| 4847|20491| 1.4416258084914566|\n|       walk| 4643|20491| 1.4846250563169108|\n|  excellent| 4424|20491| 1.5329415011346619|\n|     little| 4404|20491| 1.5374725464942618|\n|       best| 4265|20491|  1.569543584411053|\n|   bathroom| 4254|20491|   1.57212604857665|\n|  recommend| 4240|20491|  1.575422496110829|\n|        got| 4162|20491| 1.5939900373832527|\n|       area| 4152|20491|  1.596395619491108|\n|     people| 4126|20491| 1.6026773507056353|\n|       pool| 3997|20491|  1.634441685625509|\n|      beach| 3904|20491| 1.6579840968038495|\n|     nights| 3896|20491| 1.6600353795744067|\n|restaurants| 3857|20491| 1.6700960861286047|\n|comfortable| 3836|20491| 1.6755556083335037|\n|        bed| 3783|20491| 1.6894684197038032|\n| restaurant| 3692|20491| 1.7138174487140896|\n|       trip| 3597|20491| 1.7398856006412087|\n|        bar| 3500|20491| 1.7672227968593275|\n|      floor| 3441|20491| 1.7842236385393522|\n|       view| 3422|20491| 1.7897605898846938|\n|  beautiful| 3397|20491| 1.7970930761762487|\n|      right| 3318|20491| 1.8206235735864427|\n|     hotels| 3250|20491| 1.8413307690130494|\n|     better| 3244|20491|  1.843178629101529|\n|        way| 3223|20491| 1.8496731625213947|\n|       away| 3220|20491| 1.8506044057983786|\n|       desk| 3192|20491|  1.859338085767133|\n|       went| 3179|20491| 1.8634190834260298|\n|     booked| 3174|20491|  1.864993143250478|\n|       want| 3137|20491| 1.8767188361461544|\n|    reviews| 3086|20491| 1.8931100114137265|\n|       make| 3071|20491| 1.8979825238960102|\n|       free| 3065|20491| 1.8999381959665207|\n|  wonderful| 3037|20491| 1.9091155792910837|\n|      water| 3027|20491| 1.9124137353151138|\n|      price| 3025|20491| 1.9130746738718907|\n|        bit| 2961|20491| 1.9344587162352413|\n|       city| 2952|20491| 1.9375028586164695|\n|      large| 2944|20491| 1.9402165644880658|\n|        say| 2832|20491| 1.9790025895232222|\n|     resort| 2780|20491| 1.9975348376521498|\n|      close| 2777|20491|  1.998614557030033|\n|     street| 2769|20491|  2.001499521165871|\n|       days| 2736|20491| 2.0134887655943916|\n|    minutes| 2734|20491| 2.0142200270529376|\n| definitely| 2703|20491|  2.025623498060385|\n|      quite| 2689|20491| 2.0308163880679677|\n| experience| 2646|20491| 2.0469366996619316|\n|        new| 2626|20491|  2.054523989474091|\n|      going| 2588|20491| 2.0691003887160413|\n|    morning| 2587|20491|  2.069486862150803|\n|    walking| 2567|20491|  2.077247863465692|\n|      lobby| 2544|20491|   2.08624811987682|\n|     buffet| 2540|20491|   2.08782168432425|\n|      loved| 2523|20491| 2.0945370956957747|\n|      quiet| 2458|20491| 2.1206377542108523|\n|        big| 2457|20491| 2.1210446718156533|\n|    arrived| 2386|20491| 2.1503674416789713|\n|       need| 2380|20491|  2.152885277671312|\n|    perfect| 2359|20491| 2.1617479649291576|\n|      think| 2343|20491|  2.168553605829037|\n|  fantastic| 2336|20491|  2.171545700388715|\n|    problem| 2293|20491|  2.190124761478928|\n|       took| 2293|20491|  2.190124761478928|\n|     shower| 2290|20491|  2.191433947788547|\n|     lovely| 2281|20491| 2.1953718220524445|\n|         th| 2262|20491| 2.2037363876607667|\n|       beds| 2251|20491|    2.2086112034301|\n|      times| 2243|20491|  2.212171509816624|\n|        lot| 2220|20491| 2.2224785694705074|\n|      check| 2218|20491| 2.2233798764265202|\n|        use| 2214|20491| 2.2251849310682505|\n+-----------+-----+-----+-------------------+\n\n\u001b[1m\u001b[34mDN\u001b[0m: \u001b[1m\u001b[32mLong\u001b[0m = 20491\n\u001b[1m\u001b[34mdf_calculated_idf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [Word: string, DF: bigint ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=210",
+              "$$hashKey": "object:11238"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=211",
+              "$$hashKey": "object:11239"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=212",
+              "$$hashKey": "object:11240"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637989300785_58297253",
+      "id": "paragraph_1637989300785_58297253",
+      "dateCreated": "2021-11-27T05:01:40+0000",
+      "dateStarted": "2021-11-27T06:19:19+0000",
+      "dateFinished": "2021-11-27T06:19:29+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9841"
+    },
+    {
+      "text": "// cджойнить две полученные таблички и посчитать Tf-Idf (только для слов из предыдущего пункта)\nval tf_final = df_calculated_tf\n    .select(\"ReviewId\", \"Word\", \"TF\")\n    .dropDuplicates()\n\nval idf_final = df_calculated_idf\n    .select(\"Word\", \"IDF\")\n    .dropDuplicates()\n    \nval tf_idf = tf_final\n    .join(idf_final, Seq(\"Word\"), \"inner\")\n    .withColumn(\"TFIDF\", col(\"TF\") * col(\"IDF\"))\n    .select(\"ReviewId\", \"Word\", \"TFIDF\")\ntf_idf.show(100)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:19:29+0000",
+      "progress": 38,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+-----------+--------------------+\n|ReviewId|       Word|               TFIDF|\n+--------+-----------+--------------------+\n|       0|       room| 0.01549053758095477|\n|       0|      night| 0.03154574213388699|\n|       0|       took|0.030001709061355176|\n|       0|        bed| 0.02314340300964114|\n|       0|     people| 0.02195448425624158|\n|       0|        got|0.021835479964154147|\n|       0|   location|0.012592768334237257|\n|       0|        not| 0.01437804948381202|\n|       0|        did|0.028628301079791547|\n|       0|    morning|0.028349135097956207|\n|       0|       like|0.018449618658082877|\n|       0|       nice| 0.06957580192982235|\n|       0|     little|0.021061267760195367|\n|       0|      great|0.008495660570483432|\n|       0|      clean|0.013495197357602474|\n|       0|    reviews|0.025933013854982555|\n|       0|      check| 0.03045725858118521|\n|       0|    walking|0.028455450184461533|\n|       0|       good|0.010851016692555974|\n|       0|       just|0.013343849413749345|\n|       0| experience|0.028040228762492212|\n|       0|      hotel|0.006227070964169885|\n|       0|       stay| 0.01939305368646132|\n|       0|comfortable|0.022952816552513747|\n|       0|    arrived|0.029457088242177687|\n|       0|       view|0.024517268354584846|\n|       1|     better|0.021185961254040563|\n|       1|    arrived|0.012358433572867651|\n|       1|       best| 0.00902036542764973|\n|       1|        did|0.012010724016234386|\n|       1|       room|0.012997807395513775|\n|       1|       view| 0.01028598040163617|\n|       1|      night|0.013234707906745694|\n|       1|    helpful|0.008041450248602583|\n|       1|       trip|0.009999342532420739|\n|       1|  breakfast| 0.01824244257936754|\n|       1|       free|0.010919185034290348|\n|       1|      clean|0.005661778201752762|\n|       1|    morning|0.011893602656039098|\n|       1|     hotels|0.021164721482908613|\n|       1|       make|0.010907945539632242|\n|       1|       beds|0.012693167835805173|\n|       1|        day|0.007272466018703198|\n|       1|       away|0.010635657504588383|\n|       1|     booked|0.010718351397991254|\n|       1|       good| 0.01820975215072612|\n|       1|      staff|0.006611573639741086|\n|       1|         th|0.025330303306445593|\n|       1|      great|0.003564271388766038|\n|       1|   bathroom|0.018070414351455746|\n|       1|      hotel|   0.006531266959546|\n|       1|       took|0.012586923916545562|\n|       1|       stay|0.004068083100895622|\n|       1|       desk| 0.04274340427050881|\n|       1|       nice|0.005837969587214979|\n|       1|        got| 0.02748258685143539|\n|       1|         no|0.018972751579982485|\n|       1|     really|0.008242678047558462|\n|       1|       like|0.015480714506207473|\n|       1|        not|0.021112595650080297|\n|       2|       good|0.005245855752030373|\n|       2|      hotel|0.004515657421037102|\n|       2|         no|0.014575093928993166|\n|       2|        use|0.014736324046809607|\n|       2|      check|0.014724370042559737|\n|       2|      large|0.012849116321113019|\n|       2|      going|0.013702651580900936|\n|       2|       away|0.012255658316545553|\n|       2|       room|0.019970141163968183|\n|       2|        got| 0.02111245082626825|\n|       2|        way|0.012249491142525793|\n|       2|    service| 0.00788270501182946|\n|       2|      water|0.012664991624603402|\n|       2|        big|0.014046653455732803|\n|       2| experience|0.013555872183191599|\n|       2|      great|0.012321520959840212|\n|       2|   bathroom|0.020822861570551656|\n|       2|         nt| 0.03551443389532352|\n|       2|        not|0.003475488782510...|\n|       2|        bed| 0.02237706516163978|\n|       2|      night|0.038126476420095215|\n|       2|    morning| 0.04111563302286364|\n|       2|comfortable|0.011096394757175521|\n|       2|       desk|0.036940491770207945|\n|       2|      rooms|0.005952335444339209|\n|       2|       nice| 0.02018159022865046|\n|       2|        did| 0.02076025806779586|\n|       2|      price|0.012669368701138349|\n|       2|       stay| 0.01875089959088313|\n|       3|    service|0.016764626151918992|\n|       3|       free| 0.05351938580187383|\n|       3|   location|0.012947494202807322|\n|       3|      hotel|0.012804962827729624|\n|       3|      staff|0.008101505727570063|\n|       3|     lovely|  0.0309207298880626|\n|       3|       area|0.044968890689890365|\n|       3|      lobby| 0.02938377633629324|\n|       3|       stay| 0.01993933688889685|\n|       3|   friendly| 0.03536411876206465|\n|       3|        did|0.029434732096123708|\n+--------+-----------+--------------------+\nonly showing top 100 rows\n\n\u001b[1m\u001b[34mtf_final\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m = [ReviewId: bigint, Word: string ... 1 more field]\n\u001b[1m\u001b[34midf_final\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m = [Word: string, IDF: double]\n\u001b[1m\u001b[34mtf_idf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [ReviewId: bigint, Word: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=213",
+              "$$hashKey": "object:11338"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=214",
+              "$$hashKey": "object:11339"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=215",
+              "$$hashKey": "object:11340"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=216",
+              "$$hashKey": "object:11341"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637990833757_2058613266",
+      "id": "paragraph_1637990833757_2058613266",
+      "dateCreated": "2021-11-27T05:27:13+0000",
+      "dateStarted": "2021-11-27T06:19:29+0000",
+      "dateFinished": "2021-11-27T06:19:46+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9842"
+    },
+    {
+      "text": "// запайвотить табличку\n\nimport org.apache.spark.sql._\n\nval tf_idf_final = tf_idf\n    .groupBy(\"ReviewId\")\n    .pivot(\"Word\")\n    .max(\"TFIDF\")\n    .na.fill(0)\n\ntf_idf_final\n    .select(tf_idf_final.columns.take(15).map(col): _*)\n    .show(5, 10)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:20:49+0000",
+      "progress": 45,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+----------+----------+----------+---+----------+-----+---------+----------+----------+----------+----------+----------+---+----------+\n|ReviewId|      area|   arrived|      away|bar|  bathroom|beach|beautiful|       bed|      beds|      best|    better|       big|bit|    booked|\n+--------+----------+----------+----------+---+----------+-----+---------+----------+----------+----------+----------+----------+---+----------+\n|       0|       0.0|0.02945...|       0.0|0.0|       0.0|  0.0|      0.0|0.02314...|       0.0|       0.0|       0.0|       0.0|0.0|       0.0|\n|       1|       0.0|0.01235...|0.01063...|0.0|0.01807...|  0.0|      0.0|       0.0|0.01269...|0.00902...|0.02118...|       0.0|0.0|0.01071...|\n|       2|       0.0|       0.0|0.01225...|0.0|0.02082...|  0.0|      0.0|0.02237...|       0.0|       0.0|       0.0|0.01404...|0.0|       0.0|\n|       3|0.04496...|       0.0|       0.0|0.0|       0.0|  0.0|      0.0|       0.0|       0.0|       0.0|       0.0|0.02987...|0.0|       0.0|\n|       4|0.01057...|       0.0|0.01225...|0.0|0.01041...|  0.0|      0.0|       0.0|       0.0|0.01039...|0.01220...|       0.0|0.0|0.01235...|\n+--------+----------+----------+----------+---+----------+-----+---------+----------+----------+----------+----------+----------+---+----------+\nonly showing top 5 rows\n\nimport org.apache.spark.sql._\n\u001b[1m\u001b[34mtf_idf_final\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [ReviewId: bigint, area: double ... 99 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=225",
+              "$$hashKey": "object:11882"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=226",
+              "$$hashKey": "object:11883"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=227",
+              "$$hashKey": "object:11884"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=228",
+              "$$hashKey": "object:11885"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=229",
+              "$$hashKey": "object:11886"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=230",
+              "$$hashKey": "object:11887"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=231",
+              "$$hashKey": "object:11888"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=232",
+              "$$hashKey": "object:11889"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637992068371_1279851628",
+      "id": "paragraph_1637992068371_1279851628",
+      "dateCreated": "2021-11-27T05:47:48+0000",
+      "dateStarted": "2021-11-27T06:20:49+0000",
+      "dateFinished": "2021-11-27T06:21:26+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9843"
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-27T06:21:02+0000",
+      "progress": 39,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+---+--------------------+\n|ReviewId|                   2|                   3|                   4|                   5|                area|             arrived|                away|bar|            bathroom|\n+--------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+---+--------------------+\n|       0|                 0.0|                 0.0|                 0.0|                 0.0|                 0.0| 0.02906468433803231|                 0.0|0.0|                 0.0|\n|       1|0.009317125053455623|                 0.0| 0.03453579124056022|0.010164350581919512|                 0.0|0.012015567826896039|0.010340307335407958|0.0|0.017565654174040782|\n|       2|0.021245418911701355|0.022975674408028057|0.026250134318727306|                 0.0|                 0.0|                 0.0| 0.01178926759896831|0.0|  0.0200270834213586|\n|       3|0.023163408119007724|                 0.0|                 0.0|                 0.0|0.044357706419780235|                 0.0|                 0.0|0.0|                 0.0|\n|       4|0.010900427350121283|                 0.0|                 0.0|                 0.0|0.010437107392889469|                 0.0|0.012097483745346567|0.0|0.010275333650827778|\n+--------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+---+--------------------+\nonly showing top 5 rows\n\n\u001b[1m\u001b[34mtf_idf_final_trunk\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m = [ReviewId: bigint, 2: double ... 8 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=183",
+              "$$hashKey": "object:11674"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=184",
+              "$$hashKey": "object:11675"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=185",
+              "$$hashKey": "object:11676"
+            },
+            {
+              "jobUrl": "http://3a00188f2555:4040/jobs/job?id=186",
+              "$$hashKey": "object:11677"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637992346036_1899009568",
+      "id": "paragraph_1637992346036_1899009568",
+      "dateCreated": "2021-11-27T05:52:26+0000",
+      "dateStarted": "2021-11-27T06:16:07+0000",
+      "dateFinished": "2021-11-27T06:16:24+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:9844"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {},
+        "colWidth": 12,
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1637993732107_730299732",
+      "id": "paragraph_1637993732107_730299732",
+      "dateCreated": "2021-11-27T06:15:32+0000",
+      "status": "READY",
+      "$$hashKey": "object:9845",
+      "dateUpdated": "2021-11-27T06:21:05+0000"
+    }
+  ],
+  "name": "Tf-Idf",
+  "id": "2GPW77Y6F",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {
+    "isRunning": false
+  },
+  "path": "/Tf-Idf"
+}
